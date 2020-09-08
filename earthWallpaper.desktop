@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=EarthWallpaper
+Comment=Earth Wallpaper https://github.com/ghostry/EarthWallpaper
+Exec=/opt/EarthWallpaper/earthWallpaper
+Terminal=false
+Type=Application
+Categories=Application;
+Hidden=false
+X-GNOME-Autostart-enabled=true
+NoDisplay=false
+Name[zh_CN]=earthWallpaper
+Comment[zh_CN]=https://github.com/ghostry/EarthWallpaper
