@@ -11,5 +11,5 @@ sudo apt-get install imagemagick
 然后安装程序
 ```
 sudo git clone https://github.com/ghostry/EarthWallpaper.git /opt/EarthWallpaper
-ln -s /opt/EarthWallpaper/EarthWallpaper.desktop ~/.config/autostart
+ln -s /opt/EarthWallpaper/earthWallpaper.desktop ~/.config/autostart
 ```
