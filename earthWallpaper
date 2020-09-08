@@ -1,6 +1,6 @@
 #!/bin/bash
 cd $(dirname $(readlink -f "$0"))
-# 配置地球大小,默认主屏高的80%
+# 配置地球大小,默认主屏高的70%
 zoom=70
 # 是否使用 向日葵8号,1为使用
 himawari8=1
