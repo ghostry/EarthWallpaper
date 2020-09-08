@@ -6,31 +6,45 @@ zoom=70
 himawari8=1
 # 定义和读取值
 tempfile=/tmp/tempEarth.jpg
+backgroundfile=/tmp/tempEarth2.jpg
 targetfile=/tmp/earth.jpg
 screen=`xrandr|grep 'connected primary'|awk '{print $4}'|awk -F '+' '{print $1}'`
 height=`echo $screen|awk -F 'x' '{print $2}'`
 earthHeight=`echo "sclae=0; $height*$zoom/100" | bc`
-urldate=`date +%Y/%m/%d/%H -d  '-1 hours' -u`
-# 准备图片
-if [[ "x$himawari8" == "x1" ]]; then
-    echo himawari8
+# 定义操作
+himawari8(){
+    urldate=`date +%Y/%m/%d/%H -d  '-1 hours' -u`
     curl "https://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/${urldate}0000_0_0.png" > ${tempfile}.png
     convert -resize "88888x$earthHeight" ${tempfile}.png $tempfile
     rm -f ${tempfile}.png
-    convert -size 3440x1440 xc:none $targetfile
-    composite -gravity center $tempfile $targetfile $targetfile
-    rm -f $tempfile
-else
-    echo nesdis
+    convert -size 3440x1440 xc:none $backgroundfile
+    composite -gravity center $tempfile $backgroundfile $targetfile
+    rm -f $tempfile $backgroundfile
+}
+nesdis(){
     curl https://cdn.star.nesdis.noaa.gov/GOES16/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
     convert -crop 1808x1776+0+0 $tempfile $tempfile
     composite -gravity southwest hei.jpg $tempfile $tempfile
     convert -resize "88888x$earthHeight" $tempfile $tempfile
-    convert -size 3440x1440 xc:none $targetfile
-    composite -gravity center $tempfile $targetfile $targetfile
-    rm -f $tempfile
-fi
+    convert -size 3440x1440 xc:none $backgroundfile
+    composite -gravity center $tempfile $backgroundfile $targetfile
+    rm -f $tempfile $backgroundfile
+}
+getImg(){
+    if [[ "x$himawari8" == "x1" ]]; then
+        echo himawari8
+        himawari8
+    else
+        echo nesdis
+        nesdis
+    fi
+}
 # 设置桌面背景
 GIO_EXTRA_MODULES="/usr/lib/x86_64-linux-gnu/gio/modules/"
 export GIO_EXTRA_MODULES
+getImg
 gsettings set org.gnome.desktop.background picture-uri file://$targetfile
+while [[ "x$himawari8" == "x1" ]];do
+    sleep 3600
+    getImg
+done
