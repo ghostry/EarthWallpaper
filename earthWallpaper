@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+cd $(dirname $(readlink -f "$0"))
 # 配置地球大小,默认主屏高的80%
 zoom=80
 # 定义和读取值
