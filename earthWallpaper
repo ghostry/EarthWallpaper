@@ -1,21 +1,35 @@
 #!/bin/bash
 cd $(dirname $(readlink -f "$0"))
 # 配置地球大小,默认主屏高的80%
-zoom=80
+zoom=70
+# 是否使用 向日葵8号,1为使用
+himawari8=1
 # 定义和读取值
 tempfile=/tmp/tempEarth.jpg
 targetfile=/tmp/earth.jpg
 screen=`xrandr|grep 'connected primary'|awk '{print $4}'|awk -F '+' '{print $1}'`
 height=`echo $screen|awk -F 'x' '{print $2}'`
 earthHeight=`echo "sclae=0; $height*$zoom/100" | bc`
+urldate=`date +%Y/%m/%d/%H -d  '-1 hours' -u`
 # 准备图片
-curl https://cdn.star.nesdis.noaa.gov/GOES16/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
-convert -crop 1808x1776+0+0 $tempfile $tempfile
-composite -gravity southwest hei.jpg $tempfile $tempfile
-convert -resize "88888x$earthHeight>" $tempfile $tempfile
-convert -size 3440x1440 xc:none $targetfile
-composite -gravity center $tempfile $targetfile $targetfile
-rm -f $tempfile
+if [[ "x$himawari8" == "x1" ]]; then
+    echo himawari8
+    curl "https://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/${urldate}0000_0_0.png" > ${tempfile}.png
+    convert -resize "88888x$earthHeight" ${tempfile}.png $tempfile
+    rm -f ${tempfile}.png
+    convert -size 3440x1440 xc:none $targetfile
+    composite -gravity center $tempfile $targetfile $targetfile
+    rm -f $tempfile
+else
+    echo nesdis
+    curl https://cdn.star.nesdis.noaa.gov/GOES16/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
+    convert -crop 1808x1776+0+0 $tempfile $tempfile
+    composite -gravity southwest hei.jpg $tempfile $tempfile
+    convert -resize "88888x$earthHeight" $tempfile $tempfile
+    convert -size 3440x1440 xc:none $targetfile
+    composite -gravity center $tempfile $targetfile $targetfile
+    rm -f $tempfile
+fi
 # 设置桌面背景
 GIO_EXTRA_MODULES="/usr/lib/x86_64-linux-gnu/gio/modules/"
 export GIO_EXTRA_MODULES
