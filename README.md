@@ -13,3 +13,22 @@ sudo apt-get install imagemagick
 sudo git clone https://github.com/ghostry/EarthWallpaper.git /opt/EarthWallpaper
 ln -s /opt/EarthWallpaper/earthWallpaper.desktop ~/.config/autostart
 ```
+
+# 卫星选择
+编辑 earthWallpaper 中的 第6行 using="himawari8"
+目前有三个卫星可选
+
+## himawari8[向日葵8号]
+using="himawari8"
+
+![向日葵8号](himawari8.jpg)
+
+## fy4a[风云4号]
+using="fy4a"
+
+![风云4号](fy4a.jpg)
+
+## goes16
+using="goes16"
+
+![GOES16](goes16.jpg)
