@@ -17,7 +17,7 @@ himawari8(){
     curl "https://himawari8-dl.nict.go.jp/himawari8/img/D531106/1d/550/${urldate}0000_0_0.png" > ${tempfile}.png
     convert -resize "88888x$earthHeight" ${tempfile}.png $tempfile
     rm -f ${tempfile}.png
-    convert -size 3440x1440 xc:none $backgroundfile
+    convert -size $screen xc:none $backgroundfile
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
@@ -26,7 +26,7 @@ nesdis(){
     convert -crop 1808x1776+0+0 $tempfile $tempfile
     composite -gravity southwest hei.jpg $tempfile $tempfile
     convert -resize "88888x$earthHeight" $tempfile $tempfile
-    convert -size 3440x1440 xc:none $backgroundfile
+    convert -size $screen xc:none $backgroundfile
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
