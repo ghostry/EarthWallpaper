@@ -2,8 +2,8 @@
 cd $(dirname $(readlink -f "$0"))
 # 配置地球大小,默认主屏高的70%
 zoom=70
-# 是否使用 向日葵8号,1为使用
-himawari8=1
+# 使用哪个卫星的图片,目前支持三个 himawari8[向日葵8号], fy4a[风云4号], goes16
+using="himawari8"
 # 定义和读取值
 tempfile=/tmp/tempEarth.jpg
 backgroundfile=/tmp/tempEarth2.jpg
@@ -21,22 +21,38 @@ himawari8(){
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
-nesdis(){
+goes16(){
     curl https://cdn.star.nesdis.noaa.gov/GOES16/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
     convert -crop 1808x1776+0+0 $tempfile $tempfile
-    composite -gravity southwest hei.jpg $tempfile $tempfile
+    convert -size 200x200 xc:none $backgroundfile
+    composite -gravity southwest $backgroundfile $tempfile $tempfile
+    convert -resize "88888x$earthHeight" $tempfile $tempfile
+    convert -size $screen xc:none $backgroundfile
+    composite -gravity center $tempfile $backgroundfile $targetfile
+    rm -f $tempfile $backgroundfile
+}
+fy4a(){
+    urldate=`date +%Y%m%d`
+    curl "http://img.nsmc.org.cn/PORTAL/FY4/IMG/FY4A/AGRI/IMG/DISK/MTCC/NOM/FY4A-_AGRI--_N_DISK_1047E_L1C_MTCC_MULT_NOM_${urldate}040000_${urldate}041459_1000M_V0001.JPG" > $tempfile
+    convert -size 2410x860 xc:none $backgroundfile
+    composite -gravity northwest $backgroundfile $tempfile $tempfile
+    convert -size 900x900 xc:none $backgroundfile
+    composite -gravity southeast $backgroundfile $tempfile $tempfile
     convert -resize "88888x$earthHeight" $tempfile $tempfile
     convert -size $screen xc:none $backgroundfile
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
 getImg(){
-    if [[ "x$himawari8" == "x1" ]]; then
+    if [[ "x$using" == "xhimawari8" ]]; then
         echo himawari8
         himawari8
+    elif [[ "x$using" == "xfy4a" ]]; then
+        echo fy4a
+        fy4a
     else
-        echo nesdis
-        nesdis
+        echo goes16
+        goes16
     fi
 }
 # 设置桌面背景
@@ -44,7 +60,7 @@ GIO_EXTRA_MODULES="/usr/lib/x86_64-linux-gnu/gio/modules/"
 export GIO_EXTRA_MODULES
 getImg
 gsettings set org.gnome.desktop.background picture-uri file://$targetfile
-while [[ "x$himawari8" == "x1" ]];do
+while [[ "x$using" == "xhimawari8" ]];do
     sleep 3600
     getImg
 done
