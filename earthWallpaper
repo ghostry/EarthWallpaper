@@ -33,6 +33,16 @@ goes16(){
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
+goes17(){
+    curl https://cdn.star.nesdis.noaa.gov/GOES17/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
+    convert -crop 1808x1776+0+0 $tempfile $tempfile
+    convert -size 200x200 xc:none $backgroundfile
+    composite -gravity southwest $backgroundfile $tempfile $tempfile
+    convert -resize "88888x$earthHeight" $tempfile $tempfile
+    convert -size $screen xc:none $backgroundfile
+    composite -gravity center $tempfile $backgroundfile $targetfile
+    rm -f $tempfile $backgroundfile
+}
 fy4a(){
     urldate=`date +%Y%m%d`
     curl "http://img.nsmc.org.cn/PORTAL/FY4/IMG/FY4A/AGRI/IMG/DISK/MTCC/NOM/FY4A-_AGRI--_N_DISK_1047E_L1C_MTCC_MULT_NOM_${urldate}040000_${urldate}041459_1000M_V0001.JPG" > $tempfile
@@ -52,9 +62,12 @@ getImg(){
     elif [[ "x$using" == "xfy4a" ]]; then
         echo fy4a
         fy4a
-    else
+    elif [[ "x$using" == "goes16" ]]; then
         echo goes16
         goes16
+    else
+        echo goes17
+        goes17
     fi
 }
 # 设置桌面背景

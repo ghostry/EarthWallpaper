@@ -32,3 +32,8 @@ using="fy4a"
 using="goes16"
 
 ![GOES16](goes16.jpg)
+
+## goes17
+using="goes17"
+
+![GOES17](goes17.jpg)
