@@ -23,18 +23,8 @@ himawari8(){
     composite -gravity center $tempfile $backgroundfile $targetfile
     rm -f $tempfile $backgroundfile
 }
-goes16(){
-    curl https://cdn.star.nesdis.noaa.gov/GOES16/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
-    convert -crop 1808x1776+0+0 $tempfile $tempfile
-    convert -size 200x200 xc:none $backgroundfile
-    composite -gravity southwest $backgroundfile $tempfile $tempfile
-    convert -resize "88888x$earthHeight" $tempfile $tempfile
-    convert -size $screen xc:none $backgroundfile
-    composite -gravity center $tempfile $backgroundfile $targetfile
-    rm -f $tempfile $backgroundfile
-}
-goes17(){
-    curl https://cdn.star.nesdis.noaa.gov/GOES17/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
+goes(){
+    curl https://cdn.star.nesdis.noaa.gov/$1/ABI/FD/GEOCOLOR/1808x1808.jpg > $tempfile
     convert -crop 1808x1776+0+0 $tempfile $tempfile
     convert -size 200x200 xc:none $backgroundfile
     composite -gravity southwest $backgroundfile $tempfile $tempfile
@@ -62,12 +52,12 @@ getImg(){
     elif [[ "x$using" == "xfy4a" ]]; then
         echo fy4a
         fy4a
-    elif [[ "x$using" == "goes16" ]]; then
+    elif [[ "x$using" == "xgoes16" ]]; then
         echo goes16
-        goes16
+        goes "GOES16"
     else
         echo goes17
-        goes17
+        goes "GOES17"
     fi
 }
 # 设置桌面背景
