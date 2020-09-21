@@ -4,6 +4,7 @@ cd $(dirname $(readlink -f "$0"))
 zoom=70
 # 使用哪个卫星的图片,目前 himawari8[向日葵8号], fy4a[风云4号], goes16, goes17
 using="himawari8"
+source config
 # 定义和读取值
 tempfile=/tmp/tempEarth.jpg
 backgroundfile=/tmp/tempEarth2.jpg

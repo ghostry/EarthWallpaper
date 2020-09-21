@@ -15,7 +15,11 @@ ln -s /opt/EarthWallpaper/earthWallpaper.desktop ~/.config/autostart
 ```
 
 # 卫星选择
-编辑 earthWallpaper 中的 第6行 using="himawari8"
+```
+cd /opt/EarthWallpaper
+cp config.ex config
+```
+编辑 config 中的 第5行 using="himawari8"
 有以下卫星可选
 
 ## himawari8[向日葵8号]
