@@ -5,7 +5,7 @@ shell版地球背景,依赖 ImageMagick
 ubuntu为例
 首先安装 ImageMagick,安装过的跳过
 ```
-sudo apt-get install imagemagick
+sudo apt-get install imagemagick bc
 ```
 
 然后安装程序
